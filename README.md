@@ -3,8 +3,8 @@
 Overlay stream yang menunjukkan jadwal stream kedepannya, tampilan bisa disesuaikan dengan keinginan sendiri, baik melalui code html atau css
 
 Created by :
-Rokkuwu
-DekReza
+1. Rokkuwu
+2. DekReza
 
 ## Programming Language
 
