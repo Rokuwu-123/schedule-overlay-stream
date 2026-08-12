@@ -1,0 +1,168 @@
+/* 1. IMPORT GOOGLE FONTS: PATRICK HAND */
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+/* 2. FORCE FONT PATRICK HAND UNTUK SEMUA TEKS */
+.schedule-card,
+.schedule-card *,
+.fade-content,
+.fade-content * {
+    font-family: 'Patrick Hand', 'Comic Sans MS', cursive, sans-serif !important;
+}
+
+/* 3. CONTAINER MAIN STICKY NOTE */
+.schedule-card {
+    position: relative !important;
+    width: 600px !important;
+    min-height: 390px !important;
+    padding: 50px 45px 35px 45px !important;
+    box-sizing: border-box !important;
+
+    /* Warna Kuning Sticky Note */
+    background: #fef08a !important;
+
+    /* Bentuk Kertas Sticky Note */
+    border-radius: 4px 4px 30px 4px !important;
+    border: none !important;
+    
+    /* Bayangan Kertas 3D */
+    box-shadow: 
+        0 12px 28px rgba(0, 0, 0, 0.28),
+        inset 0 -10px 20px rgba(0, 0, 0, 0.05) !important;
+
+    /* SINKRONISASI ANIMASI DENGAN INPUT DURASI SETTING */
+    /* Menggunakan var(--rotation-interval) dari JS overlay, fallback ke 4s jika tidak ada */
+    animation: stickyNoteFallToFloor var(--rotation-interval, 10s) cubic-bezier(0.25, 1, 0.5, 1) infinite !important;
+    transform-origin: top center !important;
+    overflow: visible !important;
+}
+
+/* 4. HIASAN SELOTIP BENING (TAPE) DI BAGIAN ATAS */
+.schedule-card::before {
+    content: "" !important;
+    position: absolute !important;
+    top: -18px !important;
+    left: 50% !important;
+    transform: translateX(-50%) rotate(-1deg) !important;
+    width: 140px !important;
+    height: 35px !important;
+    
+    /* Selotip Semi-Transparan */
+    background: rgba(255, 255, 255, 0.65) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+    z-index: 10 !important;
+    pointer-events: none !important;
+}
+
+/* 5. EFEK LIPATAN KERTAS DI POJOK KANAN BAWAH */
+.schedule-card::after {
+    content: "" !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    
+    /* Segitiga Bayangan Lipatan Kertas */
+    border-style: solid !important;
+    border-width: 0 0 32px 32px !important;
+    border-color: transparent transparent rgba(0, 0, 0, 0.18) transparent !important;
+    
+    border-bottom-right-radius: 4px !important;
+    pointer-events: none !important;
+}
+
+/* 6. TATA LETAK & KONTEN TEKS RATA KIRI */
+.fade-content {
+    position: relative !important;
+    z-index: 2 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+}
+
+/* TAG ATAS */
+.tag {
+    color: #047857 !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    text-align: left !important;
+    width: 100% !important;
+    margin-bottom: 10px !important;
+    transform: rotate(-1deg) !important;
+    text-shadow: none !important;
+}
+
+/* JUDUL STREAM */
+.title {
+    color: #1e1b4b !important;
+    font-size: 38px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    text-align: left !important;
+    width: 100% !important;
+    margin: 10px 0 20px 0 !important;
+    text-transform: capitalize !important;
+    transform: rotate(0.5deg) !important;
+    text-shadow: none !important;
+}
+
+/* TANGGAL & WAKTU */
+.time-info {
+    color: #b45309 !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+    width: 100% !important;
+    margin-bottom: 12px !important;
+    transform: rotate(-0.5deg) !important;
+    text-shadow: none !important;
+}
+
+/* COUNTDOWN */
+.countdown {
+    color: #374151 !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+    width: 100% !important;
+    border-top: 2px dashed rgba(55, 65, 81, 0.35) !important;
+    padding-top: 10px !important;
+    letter-spacing: 0.5px !important;
+    transform: rotate(0.5deg) !important;
+    text-shadow: none !important;
+}
+
+/* 7. ANIMASI KERTAS JATUH DENGAN PROPORSI TIMING PRESISI */
+@keyframes stickyNoteFallToFloor {
+    /* 0% - 10%: Kertas baru masuk/ditempel dari atas */
+    0% {
+        transform: translateY(-250px) rotate(-8deg);
+        opacity: 0;
+    }
+    10% {
+        transform: translateY(0px) rotate(-1.5deg);
+        opacity: 1;
+    }
+
+    /* 10% - 85%: Kertas diam membaca data jadwal */
+    85% {
+        transform: translateY(0px) rotate(-1.5deg);
+        opacity: 1;
+    }
+
+    /* 85% - 92%: Kertas terlepas selotip & miring */
+    92% {
+        transform: translateY(30px) rotate(12deg);
+        opacity: 0.8;
+    }
+
+    /* 92% - 100%: Tepat di detik pergantian, kertas jatuh ke lantai */
+    100% {
+        transform: translateY(700px) rotate(35deg);
+        opacity: 0;
+    }
+}

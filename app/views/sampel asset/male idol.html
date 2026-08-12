@@ -1,0 +1,232 @@
+<style>
+  /* Menimpa kotak & background bawaan aplikasi secara mutlak */
+  html body #previewCard,
+  html body .schedule-card,
+  html body #previewFadeWrapper {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    max-width: none !important;
+  }
+
+  /* Import Font Male Idol Konser */
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@800;900&family=Montserrat:wght@800;900&display=swap');
+
+  /* Keyframe Animasi Teks Pergantian Jadwal */
+  @keyframes textFadeSlideUp {
+    0% { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Keyframe Lampu Sorot Konser */
+  @keyframes concertSpotlightLeft {
+    0%, 100% { transform: rotate(-25deg); opacity: 0.35; }
+    50% { transform: rotate(-5deg); opacity: 0.6; }
+  }
+
+  @keyframes concertSpotlightRight {
+    0%, 100% { transform: rotate(25deg); opacity: 0.35; }
+    50% { transform: rotate(5deg); opacity: 0.6; }
+  }
+
+  /* Outer Wrapper */
+  .male-idol-abstract-wrapper {
+    position: relative !important;
+    width: 680px !important;
+    overflow: visible !important;
+  }
+
+  /* Lampu Sorot Konser Kiri & Kanan */
+  .spotlight-left {
+    position: absolute !important;
+    top: -120px !important;
+    left: 10% !important;
+    width: 140px !important;
+    height: 300px !important;
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.45) 0%, rgba(212, 175, 55, 0) 100%) !important;
+    clip-path: polygon(45% 0, 55% 0, 100% 100%, 0% 100%) !important;
+    animation: concertSpotlightLeft 4s ease-in-out infinite !important;
+    transform-origin: top center !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+  }
+
+  .spotlight-right {
+    position: absolute !important;
+    top: -120px !important;
+    right: 10% !important;
+    width: 140px !important;
+    height: 300px !important;
+    background: linear-gradient(180deg, rgba(186, 85, 211, 0.45) 0%, rgba(186, 85, 211, 0) 100%) !important;
+    clip-path: polygon(45% 0, 55% 0, 100% 100%, 0% 100%) !important;
+    animation: concertSpotlightRight 4.5s ease-in-out infinite !important;
+    transform-origin: top center !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+  }
+
+  /* Card Utama Abstrak Rounded Solid (Mengesampingkan background bawaan) */
+  .abstract-idol-card {
+    position: relative !important;
+    z-index: 2 !important;
+    width: 100% !important;
+    padding: 38px 44px 32px 44px !important;
+    background: #120e24 !important; /* Midnight Purple Background */
+    border: 3px solid #d4af37 !important; /* Gold Solid Border */
+    border-radius: 40px 12px 45px 16px !important; /* Bentuk Abstrak Rounded */
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8) !important;
+    font-family: 'Montserrat', sans-serif !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+
+  /* SVG Mahkota Emas Vektor */
+  .svg-crown-icon {
+    position: absolute !important;
+    top: -24px !important;
+    left: 24px !important;
+    width: 48px !important;
+    height: 48px !important;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6)) !important;
+    z-index: 10 !important;
+  }
+
+  /* SVG Mic Vektor */
+  .svg-mic-icon {
+    position: absolute !important;
+    top: -24px !important;
+    right: 28px !important;
+    width: 44px !important;
+    height: 44px !important;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6)) !important;
+    transform: rotate(15deg) !important;
+    z-index: 10 !important;
+  }
+
+  /* Animasi Teks Pergantian Jadwal */
+  .fade-content .tag {
+    animation: textFadeSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  }
+
+  .fade-content .title {
+    animation: textFadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards !important;
+  }
+
+  .fade-content .abstract-idol-time-wrapper {
+    animation: textFadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards !important;
+  }
+
+  /* Tag / Badge Status */
+  .abstract-idol-card .tag {
+    display: inline-block !important;
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    color: #120e24 !important;
+    background: #d4af37 !important;
+    padding: 6px 20px !important;
+    border-radius: 30px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    margin-top: 6px !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* Judul Stream (.title) */
+  .abstract-idol-card .title {
+    font-family: 'Cinzel', 'Montserrat', serif !important;
+    font-size: 36px !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    margin: 8px 0 24px 0 !important;
+    line-height: 1.25 !important;
+    letter-spacing: 0.5px !important;
+    word-break: break-word !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9) !important;
+  }
+
+  /* Baris Info Waktu & Countdown */
+  .abstract-idol-time-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding-top: 18px !important;
+    border-top: 2px solid rgba(212, 175, 55, 0.3) !important;
+  }
+
+  /* Time Info */
+  .abstract-idol-card .time-info {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    padding: 10px 20px !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+  }
+
+  /* Countdown */
+  .abstract-idol-card .countdown {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    color: #120e24 !important;
+    background: #d4af37 !important;
+    padding: 10px 20px !important;
+    border-radius: 20px !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+  }
+</style>
+
+<div id="with-schedules" class="fade-content male-idol-abstract-wrapper">
+  
+  <!-- Lampu Sorot Konser -->
+  <div class="spotlight-left"></div>
+  <div class="spotlight-right"></div>
+
+  <div class="abstract-idol-card">
+    
+    <!-- SVG Mahkota Emas Vektor -->
+    <svg class="svg-crown-icon" width="48" height="48" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 48L14 20L28 32L32 12L36 32L50 20L56 48H8Z" fill="#D4AF37" stroke="#FFF2A8" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="14" cy="18" r="3" fill="#FFF2A8"/>
+      <circle cx="32" cy="10" r="4" fill="#FFF2A8"/>
+      <circle cx="50" cy="18" r="3" fill="#FFF2A8"/>
+      <rect x="8" y="48" width="48" height="6" rx="2" fill="#AA820A"/>
+    </svg>
+
+    <!-- SVG Mic Vektor -->
+    <svg class="svg-mic-icon" width="44" height="44" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="26" y="8" width="12" height="20" rx="6" fill="#D4AF37" stroke="#FFF2A8" stroke-width="2"/>
+      <path d="M20 22C20 28.6274 25.3726 34 32 34C38.6274 34 44 28.6274 44 22" stroke="#FFF2A8" stroke-width="3" stroke-linecap="round"/>
+      <path d="M32 34V46" stroke="#FFF2A8" stroke-width="3"/>
+      <path d="M24 46H40" stroke="#D4AF37" stroke-width="4" stroke-linecap="round"/>
+      <rect x="29" y="46" width="6" height="14" fill="#888888"/>
+    </svg>
+
+    <div class="tag">{tag}</div>
+    <div class="title">{title}</div>
+    
+    <div class="abstract-idol-time-wrapper">
+      <div class="time-info">🕒 {time}</div>
+      <div class="countdown">⚡ {countdown}</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="no-schedules" class="fade-content male-idol-abstract-wrapper" style="display: none !important;">
+  <div class="abstract-idol-card">
+    <div class="tag">{tag}</div>
+    <div class="title">{empty_text}</div>
+    <div class="time-info">-</div>
+  </div>
+</div>

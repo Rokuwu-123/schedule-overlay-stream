@@ -1,0 +1,41 @@
+{
+  "title": "Preset CSS Themes Index",
+  "themesPath": "/css-themes/",
+  "themes": [
+    {
+      "id": "note.css",
+      "name": "Sticky Note",
+      "file": "note.css",
+      "location": "/css-themes/note.css",
+      "description": "Playful yellow sticky note with handwritten typography and paper shadow"
+    },
+    {
+      "id": "galaxy_css.css",
+      "name": "Galaxy Classic",
+      "file": "galaxy_css.css",
+      "location": "/css-themes/galaxy_css.css",
+      "description": "Deep space background with glowing violet card borders"
+    },
+    {
+      "id": "galaxy_nebula.css",
+      "name": "Neon Galaxy Nebula",
+      "file": "galaxy_nebula.css",
+      "location": "/css-themes/galaxy_nebula.css",
+      "description": "Vibrant cosmic nebula theme with neon cyan and magenta accents"
+    },
+    {
+      "id": "nature_css.css",
+      "name": "Nature Meadow",
+      "file": "nature_css.css",
+      "location": "/css-themes/nature_css.css",
+      "description": "Organic leafy theme with gentle greens and smooth rounded cards"
+    },
+    {
+      "id": "summer_css.css",
+      "name": "Sandy Beach Summer",
+      "file": "summer_css.css",
+      "location": "/css-themes/summer_css.css",
+      "description": "Warm sunny beach vibes with tropical teal and sand gold styling"
+    }
+  ]
+}

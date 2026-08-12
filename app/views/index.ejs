@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stream Schedule Overlay - VTube Studio Style</title>
+
+    <!-- LINK GOOGLE FONTS LENGKAP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Mali:wght@500;700;800&family=Montserrat:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Poppins:wght@400;600;700;800&family=Press+Start+2P&family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- COLORIS COLOR PICKER CSS & JS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/melloware/coloris@latest/dist/coloris.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/melloware/coloris@latest/dist/coloris.min.js"></script>
+
+    <!-- LUCIDE ICONS JS -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- CODEMIRROR EDITOR CSS & JS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/hint/show-hint.min.css"
+    />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closetag.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/selection/active-line.min.js"></script>
+
+    <!-- CUSTOM APP STYLES -->
+    <link rel="stylesheet" href="/src/style.css" />
+
+    <!-- CONTAINER DINAMIS CUSTOM CSS -->
+    <style id="customDynamicCss"></style>
+  </head>
+  <body>
+    <!-- Container Tombol Aksi Pojok Kanan Atas -->
+    <div
+      class="top-right-actions"
+      style="
+        position: fixed !important;
+        top: 20px !important;
+        right: 20px !important;
+        z-index: 999999 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 10px !important;
+      "
+    >
+      <!-- 1. Tombol Copy URL Overlay (Kiri) -->
+      <button
+        type="button"
+        onclick="copyOverlayURL()"
+        title="Salin Link Overlay"
+        style="
+          position: static !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 8px !important;
+          background: linear-gradient(135deg, #3b82f6, #60a5fa) !important;
+          color: #ffffff !important;
+          border: 2px solid #ffffff !important;
+          padding: 10px 18px !important;
+          border-radius: 30px !important;
+          font-weight: 700 !important;
+          font-size: 13px !important;
+          cursor: pointer !important;
+          box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4) !important;
+          font-family: inherit !important;
+          white-space: nowrap !important;
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          style="width: 18px; height: 18px; display: block;"
+        >
+          <path
+            d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+          ></path>
+          <path
+            d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+          ></path>
+        </svg>
+        <span id="copyUrlText">Copy URL</span>
+      </button>
+
+      <!-- 2. Tombol Save Settings (Kanan) -->
+      <button
+        type="button"
+        onclick="exportOverlayHTML()"
+        title="Simpan Settings"
+        style="
+          position: static !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 8px !important;
+          background: linear-gradient(135deg, #4bac1c, #83d45c) !important;
+          color: #ffffff !important;
+          border: 2px solid #ffffff !important;
+          padding: 10px 18px !important;
+          border-radius: 30px !important;
+          font-weight: 700 !important;
+          font-size: 13px !important;
+          cursor: pointer !important;
+          box-shadow: 0 4px 15px rgba(75, 172, 28, 0.4) !important;
+          font-family: inherit !important;
+          white-space: nowrap !important;
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          style="width: 18px; height: 18px; display: block;"
+        >
+          <path
+            d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+          ></path>
+          <polyline points="17 21 17 13 7 13 7 21"></polyline>
+          <polyline points="7 3 7 8 15 8"></polyline>
+        </svg>
+        <span>Save</span>
+      </button>
+    </div>
+
+    <!-- Toggle Button -->
+    <button
+      class="vtube-toggle-btn"
+      id="vtubeToggleBtn"
+      title="Toggle Navigation Menu"
+    >
+      <i data-lucide="menu"></i>
+    </button>
+
+    <!-- Navigation Menu -->
+    <nav class="vtube-navbar" id="vtubeNavbar">
+      <button class="vtube-nav-item" onclick="openTab('tab-schedule', this)">
+        <div class="vtube-circle-icon bg-schedule">
+          <i data-lucide="calendar"></i>
+        </div>
+        <span class="vtube-label">Schedule Manager</span>
+      </button>
+
+      <button class="vtube-nav-item" onclick="openTab('tab-settings', this)">
+        <div class="vtube-circle-icon bg-settings">
+          <i data-lucide="settings"></i>
+        </div>
+        <span class="vtube-label">Settings & Style</span>
+      </button>
+
+      <button class="vtube-nav-item" onclick="closeAllMenus()">
+        <div class="vtube-circle-icon bg-close">
+          <i data-lucide="x"></i>
+        </div>
+        <span class="vtube-label">Hide Navigation</span>
+      </button>
+    </nav>
+
+    <div
+      class="menu-backdrop"
+      id="menuBackdrop"
+      onclick="closeAllMenus()"
+    ></div>
+
+    <!-- Control Panel Drawer -->
+    <div class="control-panel-drawer" id="controlPanelDrawer">
+      <!-- TAB 1: SCHEDULE MANAGER -->
+      <div class="tab-content active" id="tab-schedule">
+        <div class="logo-area"><h1>Schedule Manager</h1></div>
+        <input type="hidden" id="editIndex" value="-1" />
+
+        <div class="section-title">Add / Edit Schedule</div>
+        <div class="form-group">
+          <label>Stream Title / Game</label>
+          <input
+            type="text"
+            id="streamTitle"
+            placeholder="Enter stream title or game name..."
+          />
+        </div>
+
+        <input type="hidden" id="streamTime" />
+
+        <div class="datetime-grid">
+          <div class="form-group">
+            <label style="display: flex; flex-direction: row; align-items: center">
+              <i data-lucide="calendar" style="width: auto; height: 20px"></i> Date
+            </label>
+            <input
+              type="date"
+              id="scheduleDateInput"
+              class="datetime-picker-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label style="display: flex; flex-direction: row; align-items: center">
+              <i data-lucide="clock" style="width: auto; height: 20px"></i> Time
+            </label>
+            <input
+              type="time"
+              id="scheduleTimeInput"
+              class="datetime-picker-input"
+            />
+          </div>
+        </div>
+
+        <div
+          id="scheduleFormError"
+          class="schedule-error-msg"
+          style="display: none"
+        ></div>
+
+        <div class="btn-group" style="margin-top: 14px">
+          <button class="btn" id="addScheduleBtn">+ Add Schedule</button>
+          <button
+            class="btn btn-secondary"
+            id="clearFormBtn"
+            style="display: none"
+          >
+            Cancel
+          </button>
+        </div>
+
+        <div class="section-title" style="margin-top: 15px">
+          Daftar Schedule Aktif
+        </div>
+        <div class="schedule-list-container" id="scheduleListContainer"></div>
+      </div>
+
+      <!-- TAB 2: SETTINGS & STYLES -->
+      <div class="tab-content" id="tab-settings">
+        <div class="logo-area"><h1>Global Settings</h1></div>
+
+        <div class="section-title">Mode Tampilan</div>
+
+        <div class="mode-selector" style="margin-bottom: 12px">
+          <label class="mode-option active" id="labelModeManual">
+            <input type="radio" name="styleMode" value="manual" checked />
+            Manual
+          </label>
+          <label class="mode-option" id="labelModeSimple">
+            <input type="radio" name="styleMode" value="custom-simple" />
+            Simple
+          </label>
+          <label class="mode-option" id="labelModeAdvanced">
+            <input type="radio" name="styleMode" value="custom-advanced" />
+            Advanced
+          </label>
+        </div>
+
+        <div
+          class="settings-group"
+          id="presetThemeWrapper"
+          style="margin-bottom: 12px; display: none"
+        >
+          <div class="group-title">
+            <span>Preset Themes</span>
+          </div>
+          <div class="form-group" style="position: relative">
+            <label>Choose Preset Theme</label>
+            <div class="custom-theme-picker" id="customThemePicker">
+              <div class="theme-picker-trigger" id="themePickerTrigger">
+                <div class="selected-theme-info" id="selectedThemeInfo">
+                  <span class="selected-theme-name" id="selectedThemeName"
+                    >Manual / Default</span
+                  >
+                  <span class="selected-theme-badge" id="selectedThemeBadge"
+                    >Manual</span
+                  >
+                </div>
+                <i
+                  data-lucide="chevron-down"
+                  class="picker-chevron-icon"
+                  id="pickerChevronIcon"
+                ></i>
+              </div>
+              <div
+                class="theme-picker-dropdown"
+                id="themePickerDropdown"
+                style="display: none"
+              >
+                <div id="presetThemeGrid" class="theme-preset-grid"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WRAPPER UNTUK INPUTAN MANUAL -->
+        <div id="manualSettingWrapper" class="settings-wrapper">
+          <div class="settings-group">
+            <div class="group-title">Background & Border Card</div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Background Color</label>
+                <input
+                  type="text"
+                  id="globalAccentColor"
+                  value="#181a26f2"
+                  data-coloris
+                />
+              </div>
+              <div class="form-group">
+                <label>Border Color</label>
+                <input
+                  type="text"
+                  id="cardBorderColor"
+                  value="#ffffff"
+                  data-coloris
+                />
+              </div>
+            </div>
+            <div class="grid-2" style="margin-top: 8px">
+              <div class="form-group">
+                <label>Border Width (px)</label>
+                <input
+                  type="number"
+                  id="cardBorderWidth"
+                  value="0"
+                  min="0"
+                  max="20"
+                />
+              </div>
+              <div class="form-group">
+                <label>Border Radius: <span id="radiusLabel">24px</span></label>
+                <input
+                  type="range"
+                  id="cardBorderRadius"
+                  value="24"
+                  min="0"
+                  max="60"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <div class="group-title">Warna Teks</div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Tag Atas</label>
+                <input type="text" id="colorTag" value="#a0a5c1" data-coloris />
+              </div>
+              <div class="form-group">
+                <label>Judul Stream</label>
+                <input
+                  type="text"
+                  id="colorTitle"
+                  value="#ffffff"
+                  data-coloris
+                />
+              </div>
+            </div>
+            <div class="grid-2" style="margin-top: 8px">
+              <div class="form-group">
+                <label>Tanggal & Jam</label>
+                <input
+                  type="text"
+                  id="colorTime"
+                  value="#97f66b"
+                  data-coloris
+                />
+              </div>
+              <div class="form-group">
+                <label>Timer Countdown</label>
+                <input
+                  type="text"
+                  id="colorCountdown"
+                  value="#a0a5c1"
+                  data-coloris
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <div class="group-title">Tipografi & Ukuran Font</div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Font Family</label>
+                <div
+                  class="custom-select-wrapper"
+                  data-select-id="globalFontFamily"
+                >
+                  <input
+                    type="hidden"
+                    id="globalFontFamily"
+                    value="'Plus Jakarta Sans', sans-serif"
+                  />
+                  <div class="custom-select-trigger">
+                    <span class="custom-select-label">Plus Jakarta Sans</span>
+                    <i
+                      data-lucide="chevron-down"
+                      class="custom-select-icon"
+                    ></i>
+                  </div>
+                  <div class="custom-select-dropdown" style="display: none">
+                    <div
+                      class="custom-select-option active"
+                      data-value="'Plus Jakarta Sans', sans-serif"
+                    >
+                      Plus Jakarta Sans
+                    </div>
+                    <div
+                      class="custom-select-option"
+                      data-value="'Poppins', sans-serif"
+                    >
+                      Poppins
+                    </div>
+                    <div
+                      class="custom-select-option"
+                      data-value="'Montserrat', sans-serif"
+                    >
+                      Montserrat
+                    </div>
+                    <div
+                      class="custom-select-option"
+                      data-value="'Roboto', sans-serif"
+                    >
+                      Roboto
+                    </div>
+                    <div
+                      class="custom-select-option"
+                      data-value="'Mali', cursive"
+                    >
+                      Mali
+                    </div>
+                    <div
+                      class="custom-select-option"
+                      data-value="'Cinzel', serif"
+                    >
+                      Cinzel
+                    </div>
+                    <div
+                      class="custom-select-option"
+                      data-value="'Press Start 2P', monospace"
+                    >
+                      Press Start 2P
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Font Weight</label>
+                <div
+                  class="custom-select-wrapper"
+                  data-select-id="globalFontWeight"
+                >
+                  <input type="hidden" id="globalFontWeight" value="700" />
+                  <div class="custom-select-trigger">
+                    <span class="custom-select-label">Bold (700)</span>
+                    <i
+                      data-lucide="chevron-down"
+                      class="custom-select-icon"
+                    ></i>
+                  </div>
+                  <div class="custom-select-dropdown" style="display: none">
+                    <div class="custom-select-option" data-value="400">
+                      Regular (400)
+                    </div>
+                    <div class="custom-select-option" data-value="600">
+                      Semibold (600)
+                    </div>
+                    <div class="custom-select-option active" data-value="700">
+                      Bold (700)
+                    </div>
+                    <div class="custom-select-option" data-value="800">
+                      Extrabold (800)
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid-2" style="margin-top: 8px">
+              <div class="form-group">
+                <label>Tag Atas (px)</label>
+                <input
+                  type="number"
+                  id="fontSizeTag"
+                  value="14"
+                  min="8"
+                  max="72"
+                />
+              </div>
+              <div class="form-group">
+                <label>Judul Stream (px)</label>
+                <input
+                  type="number"
+                  id="fontSizeTitle"
+                  value="32"
+                  min="12"
+                  max="100"
+                />
+              </div>
+            </div>
+            <div class="grid-2" style="margin-top: 8px">
+              <div class="form-group">
+                <label>Tanggal & Jam (px)</label>
+                <input
+                  type="number"
+                  id="fontSizeTime"
+                  value="18"
+                  min="8"
+                  max="72"
+                />
+              </div>
+              <div class="form-group">
+                <label>Countdown (px)</label>
+                <input
+                  type="number"
+                  id="fontSizeCountdown"
+                  value="14"
+                  min="8"
+                  max="72"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <div class="group-title">Text Shadow</div>
+            <div class="form-group">
+              <label>Shadow Color</label>
+              <input
+                type="text"
+                id="shadowColor"
+                value="rgba(0,0,0,0.5)"
+                data-coloris
+              />
+            </div>
+            <div class="grid-2" style="margin-top: 8px">
+              <div class="form-group">
+                <label>Offset X (px)</label>
+                <input
+                  type="number"
+                  id="shadowX"
+                  value="0"
+                  min="-50"
+                  max="50"
+                />
+              </div>
+              <div class="form-group">
+                <label>Offset Y (px)</label>
+                <input
+                  type="number"
+                  id="shadowY"
+                  value="2"
+                  min="-50"
+                  max="50"
+                />
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 8px">
+              <label>Blur Radius (px)</label>
+              <input
+                type="number"
+                id="shadowBlur"
+                value="8"
+                min="0"
+                max="100"
+              />
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <div class="group-title">Format & Efek Animasi</div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Format Jam</label>
+                <div class="custom-select-wrapper" data-select-id="formatTime">
+                  <input type="hidden" id="formatTime" value="24" />
+                  <div class="custom-select-trigger">
+                    <span class="custom-select-label">24 Jam (20:00 WIB)</span>
+                    <i
+                      data-lucide="chevron-down"
+                      class="custom-select-icon"
+                    ></i>
+                  </div>
+                  <div class="custom-select-dropdown" style="display: none">
+                    <div class="custom-select-option active" data-value="24">
+                      24 Jam (20:00 WIB)
+                    </div>
+                    <div class="custom-select-option" data-value="12">
+                      12 Jam (08:00 PM)
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Format Tanggal</label>
+                <div class="custom-select-wrapper" data-select-id="formatDate">
+                  <input type="hidden" id="formatDate" value="long" />
+                  <div class="custom-select-trigger">
+                    <span class="custom-select-label"
+                      >Panjang (30 Juli 2026)</span
+                    >
+                    <i
+                      data-lucide="chevron-down"
+                      class="custom-select-icon"
+                    ></i>
+                  </div>
+                  <div class="custom-select-dropdown" style="display: none">
+                    <div class="custom-select-option active" data-value="long">
+                      Panjang (30 Juli 2026)
+                    </div>
+                    <div class="custom-select-option" data-value="short">
+                      Ringkas (30/07/2026)
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid-2" style="margin-top: 8px">
+              <div class="form-group">
+                <label>Efek Transisi Rotasi</label>
+                <div class="custom-select-wrapper" data-select-id="animEffect">
+                  <input type="hidden" id="animEffect" value="fade" />
+                  <div class="custom-select-trigger">
+                    <span class="custom-select-label">Fade Smooth</span>
+                    <i
+                      data-lucide="chevron-down"
+                      class="custom-select-icon"
+                    ></i>
+                  </div>
+                  <div class="custom-select-dropdown" style="display: none">
+                    <div class="custom-select-option active" data-value="fade">
+                      Fade Smooth
+                    </div>
+                    <div class="custom-select-option" data-value="slide">
+                      Slide Up
+                    </div>
+                    <div class="custom-select-option" data-value="zoom">
+                      Zoom Scale
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Teks Saat Kosong</label>
+                <input
+                  type="text"
+                  id="emptyStatusText"
+                  value="No Upcoming Schedule"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="customCssWrapper" style="display: none; margin-top: 15px">
+          <div class="section-title">CUSTOM HTML & CSS DEVELOPER MODE</div>
+
+          <div class="settings-group" id="customHtmlSection">
+            <div
+              class="group-title"
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
+              <span>Custom HTML Template</span>
+              <button
+                type="button"
+                class="btn-open-docs"
+                onclick="openDocsModal()"
+                title="View Template Documentation & Examples"
+              >
+                <i data-lucide="book-open"></i> Docs & Examples
+              </button>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px">
+              <textarea
+                id="customHtmlInput"
+                placeholder="<!-- Tempelkan Custom HTML di sini. -->"
+              ></textarea>
+            </div>
+          </div>
+
+          <div
+            class="settings-group"
+            id="customCssSection"
+            style="margin-top: 12px"
+          >
+            <div class="group-title">Custom CSS Styles</div>
+            <div class="form-group">
+              <textarea
+                id="customCssInput"
+                placeholder="/* Tempelkan Custom CSS di sini. */"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group" style="margin-top: 15px">
+          <div class="group-title">Pengaturan Rotasi & Timer</div>
+          <div class="form-group">
+            <label>Tag Atas Text</label>
+            <input type="text" id="globalTagText" value="Next Stream" />
+          </div>
+          <div class="form-group" style="margin-top: 8px">
+            <label>Durasi Rotasi (Detik)</label>
+            <input
+              type="number"
+              id="globalRotationInterval"
+              value="4"
+              min="1"
+              max="60"
+            />
+          </div>
+
+          <div class="form-group checkbox-group" style="margin-top: 12px">
+            <input type="checkbox" id="globalShowCountdown" checked />
+            <label
+              for="globalShowCountdown"
+              style="cursor: pointer; font-weight: 600"
+              >Tampilkan Timer Hitung Mundur</label
+            >
+          </div>
+
+          <div
+            class="form-group"
+            id="labelCountdownGroup"
+            style="margin-top: 8px"
+          >
+            <label>Teks Label Timer</label>
+            <input type="text" id="globalCountdownLabel" value="Countdown: " />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Overlay Viewport -->
+    <div class="viewport-overlay">
+      <div class="schedule-card" id="previewCard">
+        <div class="fade-content" id="previewFadeWrapper" data-anim="fade">
+          <div class="tag" id="prevTag">Next Stream</div>
+          <div class="title" id="prevTitle">No Schedule</div>
+          <div class="time-info" id="prevTime">-</div>
+          <div class="countdown" id="prevCountdown"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCUMENTATION MODAL -->
+    <div
+      id="docsModal"
+      class="modal-overlay"
+      onclick="closeDocsModalOnBackdrop(event)"
+    >
+      <div class="modal-container">
+        <div class="modal-header">
+          <div class="modal-title">
+            <i data-lucide="book-open" class="modal-icon"></i>
+            <div>
+              <h3>Custom HTML & CSS Template Guide</h3>
+              <p>Learn template variables, state blocks, and explore live code examples.</p>
+            </div>
+          </div>
+          <button
+            class="modal-close-btn"
+            onclick="closeDocsModal()"
+            title="Close Documentation"
+          >
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="modal-body simple-docs-body">
+          <h3 class="docs-heading">Variables</h3>
+          <ol class="docs-var-list">
+            <li><code class="var-highlight">{tag}</code> – <i>Teks Label / Tag Global</i></li>
+            <li><code class="var-highlight">{title}</code> – <i>Judul Stream / Jadwal</i></li>
+            <li><code class="var-highlight">{time}</code> – <i>Tanggal & Jam Stream Lengkap</i></li>
+            <li><code class="var-highlight">{date}</code> – <i>Tanggal Stream Saja</i></li>
+            <li><code class="var-highlight">{countdown}</code> – <i>Hitung Mundur Waktu</i></li>
+            <li><code class="var-highlight">{empty_text}</code> – <i>Teks Keterangan Saat Kosong</i></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPLICATION MAIN JS -->
+    <script src="/src/main.js"></script>
+    <script type="module" src="/src/socket.js"></script>
+  </body>
+</html>

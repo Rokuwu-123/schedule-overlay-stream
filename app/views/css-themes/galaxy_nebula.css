@@ -1,0 +1,200 @@
+/* ============================================================
+   NEON GALAXY NEBULA THEME (UNGU & BIRU) + SHOOTING STARS & METEOR
+   ============================================================ */
+
+/* 1. KARTU UTAMA (CONTAINER OVERLAY) */
+.schedule-card {
+    width: 750px !important;
+    padding: 45px 50px !important;
+    border-radius: 28px !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    position: relative !important;
+    overflow: hidden !important;
+    
+    /* Gradien Nebula Deep Purple & Cosmic Blue */
+    background: 
+        radial-gradient(circle at 15% 20%, rgba(0, 243, 255, 0.25), transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(157, 0, 255, 0.35), transparent 50%),
+        linear-gradient(135deg, #090514 0%, #150a33 45%, #08112d 100%) !important;
+    
+    /* Border Glow Neon Blue/Purple */
+    border: 1.5px solid rgba(0, 243, 255, 0.4) !important;
+    box-shadow: 
+        0 0 35px rgba(157, 0, 255, 0.35),
+        0 20px 45px rgba(0, 0, 0, 0.7),
+        inset 0 0 25px rgba(0, 243, 255, 0.15) !important;
+    
+    backdrop-filter: blur(10px) !important;
+    animation: galaxyFloat 4s ease-in-out infinite, nebulaGlow 8s ease-in-out infinite alternate !important;
+}
+
+/* 2. GUGUSAN BINTANG-BINTANG (STARFIELD BACKGROUND) */
+.schedule-card::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+    
+    background-image: 
+        radial-gradient(2px 2px at 25px 35px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 50px 85px, rgba(0, 243, 255, 0.9), rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 120px 45px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 190px 140px, rgba(180, 70, 255, 0.9), rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 280px 200px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2.5px 2.5px at 350px 90px, rgba(0, 243, 255, 0.8), rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 480px 160px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 620px 70px, rgba(180, 70, 255, 0.8), rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 700px 220px, #ffffff, rgba(0,0,0,0)) !important;
+    background-size: 380px 280px !important;
+    opacity: 0.8 !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    animation: starTwinkle 3s infinite alternate ease-in-out !important;
+}
+
+/* 3. BINTANG JATUH UTAMA (SHOOTING STAR / METEOR 1) */
+.schedule-card::after {
+    content: "" !important;
+    position: absolute !important;
+    top: -50px !important;
+    right: -50px !important;
+    width: 200px !important;
+    height: 3px !important;
+    background: linear-gradient(90deg, #ffffff 0%, #00f3ff 40%, transparent 100%) !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 12px #00f3ff, 0 0 20px #00f3ff !important;
+    transform: rotate(-35deg) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 2 !important;
+    animation: meteorPass1 3.5s cubic-bezier(0.25, 0.1, 0.25, 1) infinite !important;
+}
+
+/* 4. METEOR KEDUA (PELENGKAP DI AREA BAWAH/TENGAH) */
+.fade-content::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 20px !important;
+    right: -100px !important;
+    width: 150px !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, #ffffff 0%, #bd00ff 50%, transparent 100%) !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 10px #bd00ff !important;
+    transform: rotate(-35deg) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    z-index: 2 !important;
+    animation: meteorPass2 5s cubic-bezier(0.25, 0.1, 0.25, 1) infinite 1.8s !important;
+}
+
+/* 5. ELEMEN TEKS OVERLAY */
+.tag {
+    color: #00f3ff !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    letter-spacing: 3px !important;
+    text-transform: uppercase !important;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.7) !important;
+    position: relative !important;
+    z-index: 3 !important;
+    margin-bottom: 12px !important;
+}
+
+.title {
+    color: #ffffff !important;
+    font-size: 34px !important;
+    font-weight: 800 !important;
+    line-height: 1.35 !important;
+    text-shadow: 
+        0 0 15px rgba(255, 255, 255, 0.4),
+        0 0 30px rgba(157, 0, 255, 0.6) !important;
+    position: relative !important;
+    z-index: 3 !important;
+    margin-bottom: 20px !important;
+}
+
+.time-info {
+    color: #d1c4e9 !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    text-shadow: 0 0 10px rgba(157, 0, 255, 0.5) !important;
+    position: relative !important;
+    z-index: 3 !important;
+    margin-bottom: 18px !important;
+}
+
+.countdown {
+    color: #a7ffeb !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    border-top: 1px dashed rgba(0, 243, 255, 0.3) !important;
+    padding-top: 14px !important;
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.5) !important;
+    position: relative !important;
+    z-index: 3 !important;
+}
+
+/* ============================================================
+   KEYFRAMES ANIMASI
+   ============================================================ */
+
+/* Kartu Mengambang */
+@keyframes galaxyFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Denyut Cahaya Nebula */
+@keyframes nebulaGlow {
+    0% {
+        box-shadow: 0 0 35px rgba(157, 0, 255, 0.35), 0 20px 45px rgba(0, 0, 0, 0.7);
+    }
+    100% {
+        box-shadow: 0 0 50px rgba(0, 243, 255, 0.45), 0 20px 50px rgba(0, 0, 0, 0.85);
+    }
+}
+
+/* Kelip Bintang */
+@keyframes starTwinkle {
+    0% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+/* Animasi Bintang Jatuh / Meteor 1 (Sian/Biru) */
+@keyframes meteorPass1 {
+    0% {
+        transform: translateX(0) translateY(0) rotate(-35deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    40% {
+        transform: translateX(-900px) translateY(600px) rotate(-35deg);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(-900px) translateY(600px) rotate(-35deg);
+        opacity: 0;
+    }
+}
+
+/* Animasi Bintang Jatuh / Meteor 2 (Ungu) */
+@keyframes meteorPass2 {
+    0% {
+        transform: translateX(0) translateY(0) rotate(-35deg);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    45% {
+        transform: translateX(-800px) translateY(550px) rotate(-35deg);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(-800px) translateY(550px) rotate(-35deg);
+        opacity: 0;
+    }
+}

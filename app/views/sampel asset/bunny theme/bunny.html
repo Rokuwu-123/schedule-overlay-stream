@@ -1,0 +1,36 @@
+<div id="with-schedules" class="fade-content akasaki-bunny-wrapper">
+  <!-- Karakter Akari (Di Luar Blob Agar Tidak Terpotong) -->
+  <img src="https://denchisoft.com/wp-content/uploads/2021/02/akari_happy.png" class="bunny-character-img" alt="Akari" />
+
+  <!-- Aksen Tetesan Cairan / Splatter Drops -->
+  <div class="splash-drop drop-1"></div>
+  <div class="splash-drop drop-2"></div>
+
+  <!-- Card Utama Bentuk Tumpahan Cairan (Fully Rounded / No Sharp Edges) -->
+  <div class="akasaki-bunny-card-splash">
+    <div class="bunny-header-row">
+      <div class="bunny-ears-wrapper">
+        <div class="ear-shape left"></div>
+        <div class="ear-shape right"></div>
+      </div>
+      <span class="bunny-badge-tag">{tag}</span>
+    </div>
+
+    <div class="title">{title}</div>
+
+    <div class="bunny-footer">
+      <div class="time-info">🕒 {time}</div>
+      <div class="countdown">{countdown}</div>
+    </div>
+  </div>
+</div>
+
+<div id="no-schedules" class="fade-content akasaki-bunny-wrapper" style="display: none !important;">
+  <div class="akasaki-bunny-card-splash">
+    <div class="bunny-header-row">
+      <span class="bunny-badge-tag">{tag}</span>
+    </div>
+    <div class="title">{empty_text}</div>
+    <div class="time-info">-</div>
+  </div>
+</div>

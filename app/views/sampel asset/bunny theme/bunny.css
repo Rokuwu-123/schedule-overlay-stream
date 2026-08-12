@@ -1,0 +1,158 @@
+/* Menimpa container bawaan aplikasi */
+#previewCard,
+.schedule-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+/* Wrapper Utama */
+.akasaki-bunny-wrapper {
+  position: relative !important;
+  width: 740px !important;
+  overflow: visible !important;
+}
+
+/* Card Utama Bentuk TUMPAHAN CAIRAN ORGANIK (Semua Sudut Halus / Rounded) */
+.akasaki-bunny-card-splash {
+  position: relative !important;
+  width: 100% !important;
+  padding: 44px 175px 40px 56px !important;
+  background: linear-gradient(135deg, #1d142b 0%, #2d143a 65%, #180d26 100%) !important;
+  color: #ffffff !important;
+  font-family: 'Montserrat', sans-serif !important;
+  box-sizing: border-box !important;
+  
+  /* Formasi Curve Cairan Tumpah Smooth Organic Blob */
+  border-radius: 42% 58% 68% 32% / 56% 42% 58% 44% !important;
+  border: 3px solid #e0528b !important;
+  box-shadow: inset 0 0 25px rgba(224, 82, 139, 0.15) !important;
+}
+
+/* Tetesan Cairan Terpisah di Bawah Card */
+.splash-drop {
+  position: absolute !important;
+  background: #e0528b !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+.splash-drop.drop-1 {
+  width: 24px !important;
+  height: 22px !important;
+  bottom: -12px !important;
+  left: 90px !important;
+  border-radius: 60% 40% 50% 50% / 50% 60% 40% 50% !important;
+}
+
+.splash-drop.drop-2 {
+  width: 14px !important;
+  height: 14px !important;
+  bottom: -24px !important;
+  left: 125px !important;
+  border-radius: 50% !important;
+}
+
+/* Gambar Karakter Akari (Utuh & Tidak Terpotong) */
+.bunny-character-img {
+  position: absolute !important;
+  right: -15px !important;
+  top: -65px !important;
+  width: 215px !important;
+  height: auto !important;
+  pointer-events: none !important;
+  z-index: 10 !important;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6)) !important;
+}
+
+/* Header Row Aksen Bunny Girl */
+.bunny-header-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-bottom: 16px !important;
+}
+
+.bunny-ears-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.ear-shape {
+  width: 12px !important;
+  height: 26px !important;
+  background: #e0528b !important;
+  border-radius: 12px 12px 0 0 !important;
+  display: inline-block !important;
+}
+
+.ear-shape.left {
+  transform: rotate(-10deg) !important;
+}
+
+.ear-shape.right {
+  transform: rotate(22deg) !important;
+}
+
+/* Badge Tag Dinamis Lengkung Pill */
+.bunny-badge-tag {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #61ceeb !important;
+  background: #232738 !important;
+  border: 2px solid #3c445c !important;
+  padding: 6px 20px !important;
+  border-radius: 30px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+}
+
+/* Title Stream Besar */
+.akasaki-bunny-card-splash .title {
+  font-size: 40px !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  margin: 12px 0 24px 0 !important;
+  line-height: 1.2 !important;
+  word-break: break-word !important;
+}
+
+/* Footer Section Bar */
+.bunny-footer {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 16px !important;
+  padding-top: 18px !important;
+  border-top: 2px dashed #3a2b4d !important;
+}
+
+/* Tanggal & Jam (Pill Rounded) */
+.akasaki-bunny-card-splash .time-info {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #f0f0f0 !important;
+  background: #2a2238 !important;
+  padding: 10px 22px !important;
+  border-radius: 25px !important;
+  border: 1px solid #433559 !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+}
+
+/* Timer Countdown (Pill Rounded) */
+.akasaki-bunny-card-splash .countdown {
+  font-size: 17px !important;
+  font-weight: 800 !important;
+  color: #61ceeb !important;
+  background: #1a2a3b !important;
+  padding: 10px 22px !important;
+  border-radius: 25px !important;
+  border: 1.5px solid #2d4766 !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+}

@@ -1,0 +1,92 @@
+/* CONTAINER UTAMA OVERLAY */
+.schedule-card {
+    /* Background Galaxy/Nebula Gradien */
+    background: linear-gradient(135deg, #1b1647 0%, #39287b 50%, #1b1647 100%);
+    border-radius: 24px;
+    padding: 46px 50px;
+    width: 750px;
+    box-sizing: border-box;
+    position: relative;
+    border: 1px solid rgba(255, 215, 0, 0.3); /* Border emas tipis */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    /* Animasi kartu mengambang naik turun secara halus */
+    animation: floatCard 4s ease-in-out infinite;
+}
+
+/* Gambar Aksen Bintang Kiri Atas & Kanan Bawah (Menggunakan Unicode Gambar/Simbol) */
+.schedule-card::before {
+    content: "✦";
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #ffeaa7;
+    font-size: 24px;
+    opacity: 0.7;
+    animation: spinStar 6s linear infinite;
+}
+
+/* LABEL ATAS */
+.schedule-tag {
+    color: #ffeaa7; /* Warna Emas Soft */
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+}
+
+/* JUDUL / NAMA STREAM */
+.schedule-title {
+    color: #ffffff;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0 0 20px 0;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* TANGGAL & WAKTU */
+.schedule-time {
+    color: #a29bfe; /* Ungu Pastel Cerah */
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+/* GARIS PEMISAH */
+.schedule-divider {
+    border: none;
+    border-top: 1px dashed rgba(255, 255, 255, 0.25);
+    margin-bottom: 20px;
+}
+
+/* COUNTDOWN DOWN DI BAWAH */
+.schedule-countdown {
+    color: #dfe6e9;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Animasi Jam Pasir Berputar di Countdown */
+.schedule-countdown::before {
+    content: "⏳";
+    animation: flipIcon 3s steps(2) infinite;
+}
+
+/* KUMPULAN ANIMASI */
+@keyframes floatCard {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+@keyframes spinStar {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+@keyframes flipIcon {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+}

@@ -1,0 +1,180 @@
+<style>
+  /* Menimpa container bawaan aplikasi agar transparan penuh */
+  html body #previewCard,
+  html body .schedule-card,
+  html body #previewFadeWrapper {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    max-width: none !important;
+    display: block !important;
+  }
+
+  /* Import Font Khas Etnik/Jawa Klasik */
+  @import url('https://fonts.googleapis.com/css2?family=Yatra+One&family=Cinzel:wght@700;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap');
+
+  /* Keyframe Animasi Khusus Judul saat Pergantian Jadwal */
+  @keyframes titleFadeSlideUp {
+    0% { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Outer Wrapper Utama */
+  .wayang-overlay-wrapper {
+    position: relative !important;
+    width: 780px !important;
+    padding: 20px 0 !important;
+    background: transparent !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: visible !important;
+    margin: 0 auto !important;
+  }
+
+  /* POSISI & ROTASI GUNUNGAN */
+  .gunungan-img {
+    position: absolute !important;
+    top: 50% !important;
+    width: auto !important;
+    height: 180px !important;
+    max-height: 180px !important;
+    object-fit: contain !important;
+    z-index: 10 !important;
+    filter: none !important;
+  }
+
+  /* Gunungan Kiri: Miring 15deg */
+  .gunungan-left {
+    left: 10px !important;
+    transform: translateY(-50%) rotate(-15deg) !important;
+    transform-origin: center center !important;
+  }
+
+  /* Gunungan Kanan: Mirror & Miring -15deg */
+  .gunungan-right {
+    right: 10px !important;
+    transform: translateY(-50%) scaleX(-1) rotate(-15deg) !important;
+    transform-origin: center center !important;
+  }
+
+  /* KARTU KONTEN TENGAH - TRANSPARAN PENUH */
+  .wayang-content-card {
+    position: relative !important;
+    width: 520px !important;
+    padding: 20px 24px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+
+  /* HANYA ELEMEN .title YANG DIANIMASIKAN SAAT JADWAL BERGANTI */
+  .fade-content .title {
+    animation: titleFadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  }
+
+  /* Tag / Badge Status (Statis) */
+  .wayang-content-card .tag {
+    display: inline-block !important;
+    font-family: 'Cinzel', serif !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    color: #FFF2A8 !important;
+    background: linear-gradient(135deg, #5C2D0C, #2A1808) !important;
+    padding: 6px 24px !important;
+    border-radius: 20px !important;
+    border: 1.5px solid #C8963E !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    margin-bottom: 12px !important;
+    box-shadow: none !important;
+  }
+
+  /* Judul Stream (.title) - TANPA BAYANGAN */
+  .wayang-content-card .title {
+    font-family: 'Yatra One', 'Cinzel', serif !important;
+    font-size: 38px !important;
+    font-weight: 400 !important;
+    color: #8C4A11 !important;
+    margin: 6px 0 18px 0 !important;
+    line-height: 1.2 !important;
+    word-break: break-word !important;
+    text-shadow: none !important;
+    filter: none !important;
+  }
+
+  /* Baris Info Waktu & Countdown (Statis) */
+  .wayang-time-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding-top: 14px !important;
+    border-top: 1.5px dashed #C8963E !important;
+  }
+
+  /* Time Info (Statis) */
+  .wayang-content-card .time-info {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    color: #FFF2A8 !important;
+    background: #2A1808 !important;
+    padding: 8px 18px !important;
+    border-radius: 20px !important;
+    border: 1px solid #C8963E !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Countdown (Statis) */
+  .wayang-content-card .countdown {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    color: #2A1808 !important;
+    background: linear-gradient(135deg, #E6B356, #C8963E) !important;
+    padding: 8px 18px !important;
+    border-radius: 20px !important;
+    border: 1.5px solid #5C2D0C !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+</style>
+
+<div id="with-schedules" class="fade-content wayang-overlay-wrapper">
+  
+  <!-- Gunungan Kiri (Rotate 15deg) -->
+  <img src="https://static.vecteezy.com/system/resources/thumbnails/045/771/399/small_2x/indonesian-javanese-culture-golden-gunungan-wayang-shapes-free-png.png" class="gunungan-img gunungan-left" alt="Gunungan Kiri" />
+
+  <!-- Container Tengah (Transparan) -->
+  <div class="wayang-content-card">
+    <div class="tag">{tag}</div>
+    <div class="title">{title}</div>
+    
+    <div class="wayang-time-wrapper">
+      <div class="time-info">🕒 {time}</div>
+      <div class="countdown">⌛ {countdown}</div>
+    </div>
+  </div>
+
+  <!-- Gunungan Kanan (Rotate -15deg) -->
+  <img src="https://static.vecteezy.com/system/resources/thumbnails/045/771/399/small_2x/indonesian-javanese-culture-golden-gunungan-wayang-shapes-free-png.png" class="gunungan-img gunungan-right" alt="Gunungan Kanan" />
+
+</div>
+
+<div id="no-schedules" class="fade-content wayang-overlay-wrapper" style="display: none !important;">
+  <div class="wayang-content-card">
+    <div class="tag">{tag}</div>
+    <div class="title">{empty_text}</div>
+    <div class="time-info">-</div>
+  </div>
+</div>
