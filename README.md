@@ -2,6 +2,10 @@
 
 Overlay stream yang menunjukkan jadwal stream kedepannya, tampilan bisa disesuaikan dengan keinginan sendiri, baik melalui code html atau css
 
+Created by :
+Rokkuwu
+DekReza
+
 ## Programming Language
 
 Bahasa pemrograman yang digunakan adalah JS dengan Express sebagai frameworknya. Untuk pengiriman data menggunakan websocket dari [Socket.io](https://socket.io/)
