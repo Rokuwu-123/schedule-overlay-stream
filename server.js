@@ -8,6 +8,9 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import dashboardRouter from "./app/route/dashboard.js";
+import overlayRouter from "./app/route/overlay.js";
+
 const app = express();
 app.disable("x-powered-by");
 
@@ -18,15 +21,9 @@ app.set("views", "app/views");
 app.set("view engine", "ejs");
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.render("index");
-});
+app.use("/", dashboardRouter);
 app.use(express.static(path.join(__dirname, "app/views")));
-
-app.get("/overlay/:uuid", (req, res) => {
-  
-  res.render("overlay",{uuid: req.params.uuid});
-});
+app.use("/", overlayRouter);
 
 const server_http = http.createServer(app);
 server_http.listen(port, host, () => {
