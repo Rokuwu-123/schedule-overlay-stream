@@ -169,7 +169,9 @@ if (typeof Coloris !== "undefined") {
 function setupColorInput(inputId) {
   const colorInput = document.getElementById(inputId);
   if (!colorInput) return;
+  // Trigger pada event input dan change agar preview langsung update saat color picker digeser
   colorInput.addEventListener("input", saveAndApplySettings);
+  colorInput.addEventListener("change", saveAndApplySettings);
 }
 
 setupColorInput("globalAccentColor");
@@ -180,7 +182,10 @@ setupColorInput("colorTime");
 setupColorInput("colorCountdown");
 setupColorInput("shadowColor");
 
-document.addEventListener("coloris:pick", () => saveAndApplySettings());
+// Global Event Listener Coloris Picker
+document.addEventListener("coloris:pick", () => {
+  saveAndApplySettings();
+});
 
 // --- MODE SWITCHER ---
 const styleModeRadios = document.querySelectorAll('input[name="styleMode"]');
@@ -954,28 +959,31 @@ function setPickerFromIsoString(isoStr) {
 
 // --- HELPERS & STYLE RENDERER ---
 function formatColor(colorString, fallback) {
-  let clean = (colorString || "").trim();
+  if (!colorString) return fallback;
+  let clean = colorString.trim();
+
+  // Jika sudah format rgb/rgba
   if (/^rgba?\(/i.test(clean)) return clean;
+
   if (!clean.startsWith("#")) clean = "#" + clean;
+
+  // Jika HEX 3/4 karakter (#fff / #ffff)
   if (clean.length === 4) {
-    clean =
-      "#" +
-      clean[1] +
-      clean[1] +
-      clean[2] +
-      clean[2] +
-      clean[3] +
-      clean[3] +
-      "ff";
+    clean = "#" + clean[1] + clean[1] + clean[2] + clean[2] + clean[3] + clean[3] + "ff";
+  } else if (clean.length === 5) {
+    clean = "#" + clean[1] + clean[1] + clean[2] + clean[2] + clean[3] + clean[3] + clean[4] + clean[4];
   } else if (clean.length === 7) {
     clean = clean + "ff";
   }
+
+  // Jika tidak valid HEX 8 karakter
   if (!/^#[0-9a-fA-F]{8}$/.test(clean)) return fallback;
 
   const r = parseInt(clean.slice(1, 3), 16);
   const g = parseInt(clean.slice(3, 5), 16);
   const b = parseInt(clean.slice(5, 7), 16);
   const a = (parseInt(clean.slice(7, 9), 16) / 255).toFixed(2);
+
   return `rgba(${r}, ${g}, ${b}, ${a})`;
 }
 
@@ -1056,10 +1064,6 @@ function updateGlobalStylesPreview() {
   const textShadowValue = `${shadowX}px ${shadowY}px ${shadowBlur}px ${shadowColor}`;
 
   const borderRadius = getVal("cardBorderRadius", "24");
-
-  card.style.setProperty("--global-font-family", fontFamily);
-  card.style.setProperty("--global-font-weight", fontWeight);
-
   const dynamicCss = document.getElementById("customDynamicCss");
 
   if (mode === "manual") {
@@ -1073,12 +1077,12 @@ function updateGlobalStylesPreview() {
     );
     const borderWidth = getVal("cardBorderWidth", "0");
 
-    card.style.backgroundColor = bg;
-    card.style.border = `${borderWidth}px solid ${borderColor}`;
-    card.style.borderRadius = `${borderRadius}px`;
-    card.style.fontFamily = fontFamily;
-    card.style.fontWeight = fontWeight;
-    card.style.padding = "35px";
+    // Menggunakan setProperty dengan !important agar langsung meng-override CSS stylesheet
+    card.style.setProperty("background-color", bg, "important");
+    card.style.setProperty("border", `${borderWidth}px solid ${borderColor}`, "important");
+    card.style.setProperty("border-radius", `${borderRadius}px`, "important");
+    card.style.setProperty("font-family", fontFamily);
+    card.style.setProperty("font-weight", fontWeight);
 
     const tagEl = document.getElementById("prevTag");
     const titleEl = document.getElementById("prevTitle");
@@ -1109,9 +1113,9 @@ function updateGlobalStylesPreview() {
 
     if (dynamicCss) dynamicCss.innerHTML = "";
   } else {
-    card.style.backgroundColor = "";
-    card.style.border = "";
-    card.style.borderRadius = "";
+    card.style.removeProperty("background-color");
+    card.style.removeProperty("border");
+    card.style.removeProperty("border-radius");
     card.style.fontFamily = fontFamily;
     card.style.fontWeight = fontWeight;
 
@@ -1426,6 +1430,9 @@ function renderCardContent(activeItem, hasSchedules) {
     });
   }
 
+  // Terapkan kembali warna dan gaya instan ke preview card setelah HTML dirender
+  updateGlobalStylesPreview();
+
   clearInterval(countdownInterval);
   const cdEl = document.getElementById("prevCountdown");
 
@@ -1554,29 +1561,6 @@ function closeDocsModalOnBackdrop(e) {
   }
 }
 window.closeDocsModalOnBackdrop = closeDocsModalOnBackdrop;
-
-// ==========================================
-// EXPORT STANDALONE HTML / SAVE LOGIC (SINGLE SAVE FIX)
-// ==========================================
-// async function exportOverlayHTML() {
-//   const data = saveAndApplySettings();
-
-//   try {
-//     const uuid = localStorage.getItem("uuid");
-//     if (uuid) {
-//       await fetch("/api/save-settings", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ uuid, data }),
-//       });
-//     }
-//   } catch (err) {
-//     console.warn("Server save skip/fallback to local:", err);
-//   }
-
-//   alert("Settings & Schedule berhasil disimpan!");
-// }
-// window.exportOverlayHTML = exportOverlayHTML;
 
 // ==========================================
 // COPY OVERLAY URL LOGIC
