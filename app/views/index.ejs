@@ -115,7 +115,8 @@
       <!-- 2. Tombol Save Settings (Kanan) -->
       <button
         type="button"
-        onclick="exportOverlayHTML()"
+        id="saveSettingsBtn"
+        onclick="handleSaveSettings()"
         title="Simpan Settings"
         style="
           position: static !important;
@@ -134,6 +135,7 @@
           box-shadow: 0 4px 15px rgba(75, 172, 28, 0.4) !important;
           font-family: inherit !important;
           white-space: nowrap !important;
+          transition: transform 0.15s ease, background 0.3s ease, box-shadow 0.3s ease !important;
         "
       >
         <svg
@@ -152,7 +154,7 @@
           <polyline points="17 21 17 13 7 13 7 21"></polyline>
           <polyline points="7 3 7 8 15 8"></polyline>
         </svg>
-        <span>Save</span>
+        <span id="saveBtnText">Save</span>
       </button>
     </div>
 
@@ -775,8 +777,8 @@
         </div>
       </div>
       <footer class="app-footer">
-  <p>Created by Rokkuwu & Dek Reza</p>
-</footer>
+        <p>Created by Rokkuwu & Dek Reza</p>
+      </footer>
     </div>
 
     <!-- DOCUMENTATION MODAL -->
@@ -815,13 +817,10 @@
           </ol>
         </div>
       </div>
-      
     </div>
 
     <!-- APPLICATION MAIN JS -->
     <script src="/src/main.js"></script>
     <script type="module" src="/src/socket.js"></script>
-    <!-- Ganti bagian footer di HTML menjadi seperti ini -->
-
   </body>
 </html>

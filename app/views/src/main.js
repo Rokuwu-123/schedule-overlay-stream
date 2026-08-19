@@ -1587,3 +1587,39 @@ function copyOverlayURL() {
     });
 }
 window.copyOverlayURL = copyOverlayURL;
+
+// --- HANDLE SAVE BUTTON CLICK WITH ANIMATION & FEEDBACK ---
+function handleSaveSettings() {
+  const saveBtn = document.getElementById("saveSettingsBtn");
+  const saveText = document.getElementById("saveBtnText");
+
+  // Simpan konfigurasi
+  saveAndApplySettings();
+
+  if (saveBtn) {
+    // 1. Efek animasi tekan (click scale animation)
+    saveBtn.style.transform = "scale(0.92)";
+    
+    setTimeout(() => {
+      saveBtn.style.transform = "scale(1)";
+    }, 150);
+
+    // 2. Ubah teks & gaya visual tombol secara sementara
+    if (saveText) {
+      const originalText = "Save";
+      saveText.textContent = "OBS Client Terupdate!";
+      
+      // Ubah background menjadi warna hijau sukses aktif
+      saveBtn.style.background = "linear-gradient(135deg, #10b981, #059669)";
+      saveBtn.style.boxShadow = "0 4px 18px rgba(16, 185, 129, 0.6)";
+
+      // Kembalikan ke tampilan semula setelah 2.5 detik
+      setTimeout(() => {
+        saveText.textContent = originalText;
+        saveBtn.style.background = "linear-gradient(135deg, #4bac1c, #83d45c)";
+        saveBtn.style.boxShadow = "0 4px 15px rgba(75, 172, 28, 0.4)";
+      }, 2500);
+    }
+  }
+}
+window.handleSaveSettings = handleSaveSettings;
