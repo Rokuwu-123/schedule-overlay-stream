@@ -1,6 +1,6 @@
 import { io } from "/socket.io/socket.io.esm.min.js";
 
-console.log("tes")
+
 const socket = io();
  socket.on("getID", (data) => {
   localStorage.setItem("uuid", data);

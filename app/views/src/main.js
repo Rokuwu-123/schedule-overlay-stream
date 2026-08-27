@@ -1590,11 +1590,13 @@ window.copyOverlayURL = copyOverlayURL;
 
 // --- HANDLE SAVE BUTTON CLICK WITH ANIMATION & FEEDBACK ---
 function handleSaveSettings() {
+ 
   const saveBtn = document.getElementById("saveSettingsBtn");
   const saveText = document.getElementById("saveBtnText");
 
   // Simpan konfigurasi
-  saveAndApplySettings();
+  // saveAndApplySettings();
+  exportOverlayHTML()
 
   if (saveBtn) {
     // 1. Efek animasi tekan (click scale animation)
