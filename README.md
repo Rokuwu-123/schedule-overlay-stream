@@ -16,7 +16,7 @@
 </div>
 <br>
 
-Overlay stream yang menunjukkan jadwal stream kedepannya, tampilan bisa disesuaikan dengan keinginan sendiri, baik melalui code html atau css
+Overlay stream yang menunjukkan jadwal stream kedepannya, tampilan bisa disesuaikan dengan keinginan sendiri, baik melalui code HTML atau CSS
 
 Created by :
 1. Rokkuwu
