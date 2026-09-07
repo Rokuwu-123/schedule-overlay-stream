@@ -5,14 +5,14 @@
     <img src="https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white&style=for-the-badge" alt="Discord">
   </a>
   <a href="https://x.com/raimustudio" title="X">
-  <img src="https://img.shields.io/badge/Raimu Studio-000000.svg?logo=x&logoColor=white&style=for-the-badge" alt="DekReza">
-</a>
+    <img src="https://img.shields.io/badge/Raimu Studio-000000.svg?logo=x&logoColor=white&style=for-the-badge" alt="DekReza">  
+  </a>
   <a href="https://x.com/Rokkuwu2023" title="X">
-  <img src="https://img.shields.io/badge/Rokkuwu-000000.svg?logo=x&logoColor=white&style=for-the-badge" alt="Rokkuwu2023">
-</a>
-<a href="https://x.com/Revernry" title="X">
-  <img src="https://img.shields.io/badge/DekReza-000000.svg?logo=x&logoColor=white&style=for-the-badge" alt="DekReza">
-</a>
+    <img src="https://img.shields.io/badge/Rokkuwu-000000.svg?logo=x&logoColor=white&style=for-the-badge" alt="Rokkuwu2023">
+  </a>
+  <a href="https://x.com/Revernry" title="X">
+    <img src="https://img.shields.io/badge/DekReza-000000.svg?logo=x&logoColor=white&style=for-the-badge" alt="DekReza">
+  </a>
 </div>
 <br>
 
