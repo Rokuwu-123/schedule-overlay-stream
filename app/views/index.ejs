@@ -226,6 +226,12 @@
               id="scheduleDateInput"
               class="datetime-picker-input"
             />
+            <div class="picker-quick-row" id="dateQuickChips" aria-label="Quick date selection">
+              <button type="button" class="chip-btn" data-date-preset="today">Today</button>
+              <button type="button" class="chip-btn" data-date-preset="tomorrow">Tomorrow</button>
+              <button type="button" class="chip-btn" data-date-preset="nextweek">Next week</button>
+            </div>
+            <span class="field-hint">Pick a date or use a quick option.</span>
           </div>
 
           <div class="form-group">
@@ -237,6 +243,12 @@
               id="scheduleTimeInput"
               class="datetime-picker-input"
             />
+            <div class="picker-quick-row" id="timeQuickChips" aria-label="Quick time selection">
+              <button type="button" class="chip-btn" data-time-preset="09:00">09:00</button>
+              <button type="button" class="chip-btn" data-time-preset="13:00">13:00</button>
+              <button type="button" class="chip-btn" data-time-preset="20:00">20:00</button>
+            </div>
+            <span class="field-hint">Set the start time for your stream.</span>
           </div>
         </div>
 
@@ -647,7 +659,10 @@
             </div>
             <div class="grid-2" style="margin-top: 8px">
               <div class="form-group">
-                <label>Efek Transisi Rotasi</label>
+                <label class="label-with-action">
+                  <span>Efek Pergantian Schedule</span>
+                  <button type="button" class="btn-preview-animation" id="previewAnimationBtn">Preview</button>
+                </label>
                 <div class="custom-select-wrapper" data-select-id="animEffect">
                   <input type="hidden" id="animEffect" value="fade" />
                   <div class="custom-select-trigger">
@@ -664,8 +679,26 @@
                     <div class="custom-select-option" data-value="slide">
                       Slide Up
                     </div>
+                    <div class="custom-select-option" data-value="slide-down">
+                      Slide Down
+                    </div>
                     <div class="custom-select-option" data-value="zoom">
                       Zoom Scale
+                    </div>
+                    <div class="custom-select-option" data-value="blur">
+                      Blur In
+                    </div>
+                    <div class="custom-select-option" data-value="flip">
+                      Flip In
+                    </div>
+                    <div class="custom-select-option" data-value="bounce">
+                      Soft Bounce
+                    </div>
+                    <div class="custom-select-option" data-value="wipe">
+                      Wipe Reveal
+                    </div>
+                    <div class="custom-select-option" data-value="glitch">
+                      Glitch
                     </div>
                   </div>
                 </div>
@@ -729,22 +762,11 @@
         </div>
 
         <div class="settings-group" style="margin-top: 15px">
-          <div class="group-title">Pengaturan Rotasi & Timer</div>
+          <div class="group-title">Pengaturan Tampilan & Timer</div>
           <div class="form-group">
             <label>Tag Atas Text</label>
             <input type="text" id="globalTagText" value="Next Stream" />
           </div>
-          <div class="form-group" style="margin-top: 8px">
-            <label>Durasi Rotasi (Detik)</label>
-            <input
-              type="number"
-              id="globalRotationInterval"
-              value="4"
-              min="1"
-              max="60"
-            />
-          </div>
-
           <div class="form-group checkbox-group" style="margin-top: 12px">
             <input type="checkbox" id="globalShowCountdown" checked />
             <label
@@ -770,10 +792,10 @@
     <div class="viewport-overlay">
       <div class="schedule-card" id="previewCard">
         <div class="fade-content" id="previewFadeWrapper" data-anim="fade">
-          <div class="tag" id="prevTag">Next Stream</div>
-          <div class="title" id="prevTitle">No Schedule</div>
-          <div class="time-info" id="prevTime">-</div>
-          <div class="countdown" id="prevCountdown"></div>
+          <div class="tag schedule-tag" id="prevTag">Next Stream</div>
+          <div class="title schedule-title" id="prevTitle">No Schedule</div>
+          <div class="time-info schedule-time" id="prevTime">-</div>
+          <div class="countdown schedule-countdown" id="prevCountdown"></div>
         </div>
       </div>
       <footer class="app-footer">

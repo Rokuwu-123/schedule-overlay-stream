@@ -3,7 +3,7 @@
 // ==========================================
 
 let scheduleList = [];
-let previewRotationIndex = 0;
+let previewActiveKey = null;
 let countdownInterval = null;
 let mainLoopTimeout = null;
 
@@ -577,6 +577,26 @@ inputIdsToWatch.forEach((id) => {
   }
 });
 
+function previewAnimation() {
+  const fader =
+    document.getElementById("previewFadeWrapper") ||
+    document.getElementById("previewCard");
+  if (!fader) return;
+
+  fader.classList.remove("hidden");
+  void fader.offsetWidth;
+  fader.classList.add("hidden");
+
+  window.setTimeout(() => {
+    fader.classList.remove("hidden");
+  }, 360);
+}
+
+const previewAnimationBtn = document.getElementById("previewAnimationBtn");
+if (previewAnimationBtn) {
+  previewAnimationBtn.addEventListener("click", previewAnimation);
+}
+
 const borderRadiusEl = document.getElementById("cardBorderRadius");
 if (borderRadiusEl) {
   borderRadiusEl.addEventListener("input", (e) => {
@@ -866,6 +886,10 @@ function initInlineDateTimePicker() {
   timeInput.value = "";
   streamTime.value = "";
 
+  const now = new Date();
+  const todayValue = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  dateInput.min = todayValue;
+
   function updateCombinedStreamTime() {
     if (dateInput.value && timeInput.value) {
       streamTime.value = `${dateInput.value}T${timeInput.value}`;
@@ -878,6 +902,10 @@ function initInlineDateTimePicker() {
   dateInput.addEventListener("input", updateCombinedStreamTime);
   timeInput.addEventListener("change", updateCombinedStreamTime);
   timeInput.addEventListener("input", updateCombinedStreamTime);
+
+  function clearActiveChip(group) {
+    group?.forEach((chip) => chip.classList.remove("active"));
+  }
 
   ["streamTitle", "scheduleDateInput", "scheduleTimeInput"].forEach((id) => {
     const el = document.getElementById(id);
@@ -897,6 +925,11 @@ function initInlineDateTimePicker() {
   });
 
   const dateChips = document.querySelectorAll("#dateQuickChips .chip-btn");
+  const timeChips = document.querySelectorAll("#timeQuickChips .chip-btn");
+
+  dateInput.addEventListener("input", () => clearActiveChip(dateChips));
+  timeInput.addEventListener("input", () => clearActiveChip(timeChips));
+
   dateChips.forEach((btn) => {
     btn.addEventListener("click", () => {
       const preset = btn.getAttribute("data-date-preset");
@@ -918,7 +951,6 @@ function initInlineDateTimePicker() {
     });
   });
 
-  const timeChips = document.querySelectorAll("#timeQuickChips .chip-btn");
   timeChips.forEach((btn) => {
     btn.addEventListener("click", () => {
       const preset = btn.getAttribute("data-time-preset");
@@ -1150,7 +1182,7 @@ function getValidSchedules() {
   const now = new Date();
   return scheduleList.filter((item) => {
     const itemDate = new Date(item.time);
-    return itemDate.getTime() >= now.getTime() || isSameDay(itemDate, now);
+    return itemDate.getTime() >= now.getTime();
   });
 }
 
@@ -1165,14 +1197,31 @@ function renderScheduleList() {
   }
 
   const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const startOfTomorrow = new Date(startOfToday);
+  startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
+  const groups = [
+    { id: "today", label: "Today", items: [] },
+    { id: "tomorrow", label: "Tomorrow", items: [] },
+    { id: "upcoming", label: "Upcoming", items: [] },
+    { id: "expired", label: "Expired", items: [] },
+  ];
 
   scheduleList.forEach((item, index) => {
     const dateObj = new Date(item.time);
-    const isToday = isSameDay(dateObj, now);
+    const itemDay = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
     const isPassedTime = dateObj.getTime() < now.getTime();
+    const isToday = itemDay.getTime() === startOfToday.getTime();
+    const isTomorrow = itemDay.getTime() === startOfTomorrow.getTime();
+    const isExpired = isPassedTime;
 
-    const isExpired = isPassedTime && !isToday;
-    const isLiveNow = isPassedTime && isToday;
+    const group = isExpired
+      ? groups[3]
+      : isToday
+        ? groups[0]
+        : isTomorrow
+          ? groups[1]
+          : groups[2];
 
     const formattedDate =
       dateObj.toLocaleDateString("en-US", {
@@ -1187,14 +1236,11 @@ function renderScheduleList() {
     card.id = `schedule-card-${index}`;
 
     let statusBadgeClass = "standby";
-    let statusBadgeText = "In Loop";
+    let statusBadgeText = "Scheduled";
 
     if (isExpired) {
       statusBadgeClass = "expired";
-      statusBadgeText = "Expired";
-    } else if (isLiveNow) {
-      statusBadgeClass = "live";
-      statusBadgeText = "LIVE NOW";
+      statusBadgeText = "Completed";
     }
 
     card.innerHTML = `
@@ -1206,10 +1252,26 @@ function renderScheduleList() {
       <div class="card-time"><i data-lucide="calendar" style="width:13px;height:13px;margin-right:4px;vertical-align:middle;display:inline-block;"></i>${formattedDate}</div>
       <div class="card-actions">
         <button class="btn-card-action btn-card-edit" onclick="editSchedule(${index})"><i data-lucide="pencil" style="width:12px;height:12px;margin-right:4px;"></i>Edit</button>
+        <button class="btn-card-action btn-card-copy" onclick="duplicateSchedule(${index})"><i data-lucide="copy" style="width:12px;height:12px;margin-right:4px;"></i>Duplicate</button>
         <button class="btn-card-action btn-card-del" onclick="deleteSchedule(${index})"><i data-lucide="trash-2" style="width:12px;height:12px;margin-right:4px;"></i>Delete</button>
       </div>
     `;
-    container.appendChild(card);
+    group.items.push({ card, index });
+  });
+
+  groups.forEach((group) => {
+    if (group.items.length === 0) return;
+
+    const groupEl = document.createElement("section");
+    groupEl.className = `schedule-list-group schedule-group-${group.id}`;
+    groupEl.innerHTML = `
+      <div class="schedule-group-heading">
+        <span>${group.label}</span>
+        <span class="schedule-group-count">${group.items.length}</span>
+      </div>
+    `;
+    group.items.forEach(({ card }) => groupEl.appendChild(card));
+    container.appendChild(groupEl);
   });
 
   if (window.lucide && typeof lucide.createIcons === "function") {
@@ -1286,12 +1348,31 @@ if (clearBtn) {
 }
 
 function deleteSchedule(index) {
+  const item = scheduleList[index];
+  if (!item || !window.confirm(`Delete "${item.title}" from your schedule?`)) return;
   scheduleList.splice(index, 1);
   saveAndApplySettings();
   renderScheduleList();
   restartPreviewRotation();
 }
 window.deleteSchedule = deleteSchedule;
+
+function duplicateSchedule(index) {
+  const item = scheduleList[index];
+  if (!item) return;
+
+  scheduleList.push({
+    title: `${item.title} (Copy)`,
+    time: item.time,
+  });
+  scheduleList.sort(
+    (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()
+  );
+  saveAndApplySettings();
+  renderScheduleList();
+  restartPreviewRotation();
+}
+window.duplicateSchedule = duplicateSchedule;
 
 function editSchedule(index) {
   const item = scheduleList[index];
@@ -1372,10 +1453,10 @@ function renderCardContent(activeItem, hasSchedules) {
     if (!fader || !document.getElementById("prevTitle")) {
       card.innerHTML = `
         <div class="fade-content" id="previewFadeWrapper" data-anim="${getVal("animEffect", "fade")}">
-          <div class="tag" id="prevTag">${globalTag}</div>
-          <div class="title" id="prevTitle">${titleText}</div>
-          <div class="time-info" id="prevTime">${fullTimeText}</div>
-          <div class="countdown" id="prevCountdown"></div>
+           <div class="tag schedule-tag" id="prevTag">${globalTag}</div>
+           <div class="title schedule-title" id="prevTitle">${titleText}</div>
+           <div class="time-info schedule-time" id="prevTime">${fullTimeText}</div>
+           <div class="countdown schedule-countdown" id="prevCountdown"></div>
         </div>
       `;
     } else {
@@ -1457,19 +1538,18 @@ function renderCardContent(activeItem, hasSchedules) {
   }
 }
 
-// Rotation engine
+// Preview engine: the default overlay shows only the nearest upcoming stream.
 function runRotationStep() {
   const validSchedules = getValidSchedules();
 
   if (validSchedules.length === 0) {
-    renderCardContent(null, false);
-    const rotEl = document.getElementById("globalRotationInterval");
-    const currentSecs = ((rotEl && parseInt(rotEl.value)) || 4) * 1000;
-    mainLoopTimeout = setTimeout(runRotationStep, currentSecs);
+    if (previewActiveKey !== null) {
+      renderCardContent(null, false);
+      previewActiveKey = null;
+    }
+    mainLoopTimeout = setTimeout(runRotationStep, 1000);
     return;
   }
-
-  if (previewRotationIndex >= validSchedules.length) previewRotationIndex = 0;
 
   const now = new Date();
 
@@ -1477,25 +1557,22 @@ function runRotationStep() {
     const cardEl = document.getElementById(`schedule-card-${i}`);
     const badge = document.getElementById(`badge-${i}`);
     const itemDate = new Date(item.time);
-    const isToday = isSameDay(itemDate, now);
     const isPassedTime = itemDate.getTime() < now.getTime();
 
     if (cardEl && badge) {
       cardEl.classList.remove("active-showing");
-      if (isPassedTime && !isToday) {
+      if (isPassedTime) {
         badge.className = "badge-status expired";
-        badge.innerText = "Expired";
-      } else if (isPassedTime && isToday) {
-        badge.className = "badge-status live";
-        badge.innerText = "LIVE NOW";
+        badge.innerText = "Completed";
       } else {
         badge.className = "badge-status standby";
-        badge.innerText = "In Loop";
+        badge.innerText = "Scheduled";
       }
     }
   });
 
-  const activeItem = validSchedules[previewRotationIndex];
+  const activeItem = validSchedules[0];
+  const activeKey = `${activeItem.time}|${activeItem.title}`;
   const originalIndex = scheduleList.indexOf(activeItem);
 
   if (originalIndex !== -1) {
@@ -1505,35 +1582,33 @@ function runRotationStep() {
     const currentBadge = document.getElementById(`badge-${originalIndex}`);
     if (currentCard && currentBadge) {
       currentCard.classList.add("active-showing");
-      if (!currentBadge.classList.contains("live")) {
-        currentBadge.className = "badge-status showing";
-        currentBadge.innerText = "Showing";
-      }
+      currentBadge.className = "badge-status showing";
+      currentBadge.innerText = "Next Stream";
     }
   }
 
-  const fader =
-    document.getElementById("previewFadeWrapper") ||
-    document.getElementById("previewCard");
-  if (fader) fader.classList.add("hidden");
-
-  setTimeout(() => {
-    renderCardContent(activeItem, true);
-    const newFader =
+  if (previewActiveKey !== activeKey) {
+    const fader =
       document.getElementById("previewFadeWrapper") ||
       document.getElementById("previewCard");
-    if (newFader) newFader.classList.remove("hidden");
-  }, 350);
+    if (fader) fader.classList.add("hidden");
 
-  previewRotationIndex++;
-  const rotEl = document.getElementById("globalRotationInterval");
-  const currentSecs = ((rotEl && parseInt(rotEl.value)) || 4) * 1000;
-  mainLoopTimeout = setTimeout(runRotationStep, currentSecs);
+    setTimeout(() => {
+      renderCardContent(activeItem, true);
+      const newFader =
+        document.getElementById("previewFadeWrapper") ||
+        document.getElementById("previewCard");
+      if (newFader) newFader.classList.remove("hidden");
+    }, 350);
+    previewActiveKey = activeKey;
+  }
+
+  mainLoopTimeout = setTimeout(runRotationStep, 1000);
 }
 
 function restartPreviewRotation() {
   clearTimeout(mainLoopTimeout);
-  previewRotationIndex = 0;
+  previewActiveKey = null;
   runRotationStep();
 }
 
