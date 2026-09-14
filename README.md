@@ -22,6 +22,11 @@ Created by :
 1. Rokkuwu
 2. DekReza
 
+# DISCLAIMER
+
+Repository ini berbeda dengan yang digunakan pada http://schedule-overlay.vercel.app/
+Kalian bebas bereksperimen sesuka hati backup coding ada di Rokkuwu
+
 ## Programming Language
 
 Bahasa pemrograman yang digunakan adalah JS dengan Express sebagai frameworknya. Untuk pengiriman data menggunakan websocket dari [Socket.io](https://socket.io/)
