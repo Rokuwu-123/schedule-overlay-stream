@@ -14,8 +14,7 @@ window.exportOverlayHTML = function () {
   const storageData = storageDataRaw ? JSON.parse(storageDataRaw) : {};
 
   const mode = storageData.styleMode || "manual";
-  const interval = (parseInt(storageData.interval) || 4) * 1000;
-  const animEffect = storageData.animEffect || "fade";
+   const animEffect = storageData.animEffect || "fade";
 
   const selectedFontFamily =
     storageData.fontFamily || "'Plus Jakarta Sans', sans-serif";
@@ -57,10 +56,11 @@ window.exportOverlayHTML = function () {
   // Base Overlay Rules diambil langsung dari style.css
   const baseOverlayRules = `
     .schedule-card {
-      width: 700px;
+      width: min(700px, calc(100vw - 32px));
+      max-width: 100%;
       height: auto;
       border-radius: 24px;
-      padding: 35px;
+      padding: clamp(22px, 5vw, 35px);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
       overflow: hidden;
       box-sizing: border-box;
@@ -173,12 +173,24 @@ window.exportOverlayHTML = function () {
 
     .fade-content {
       opacity: 1 !important;
-      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      transition:
+        opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        filter 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        clip-path 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       transform: translateY(0) scale(1);
+      filter: blur(0);
+      clip-path: inset(0 0 0 0);
     }
     .fade-content.hidden[data-anim="fade"] { opacity: 0 !important; }
     .fade-content.hidden[data-anim="slide"] { opacity: 0 !important; transform: translateY(20px); }
+    .fade-content.hidden[data-anim="slide-down"] { opacity: 0 !important; transform: translateY(-20px); }
     .fade-content.hidden[data-anim="zoom"] { opacity: 0 !important; transform: scale(0.92); }
+    .fade-content.hidden[data-anim="blur"] { opacity: 0 !important; filter: blur(10px); transform: scale(1.03); }
+    .fade-content.hidden[data-anim="flip"] { opacity: 0 !important; transform: perspective(700px) rotateX(-75deg); transform-origin: center bottom; }
+    .fade-content.hidden[data-anim="bounce"] { opacity: 0 !important; transform: translateY(26px) scale(0.96); }
+    .fade-content.hidden[data-anim="wipe"] { opacity: 0 !important; clip-path: inset(0 100% 0 0); }
+    .fade-content.hidden[data-anim="glitch"] { opacity: 0 !important; transform: translateX(12px) skewX(-5deg); filter: saturate(1.8) contrast(1.2); }
 
     /* 2. Custom CSS Theme OR Manual Styles Override */
     ${mode === "manual" ? manualCss : cleanCustomCss}
@@ -195,7 +207,7 @@ window.exportOverlayHTML = function () {
   <script>
     const config = ${JSON.stringify(storageData)};
     const scheduleList = config.scheduleList || [];
-    let currentIndex = 0;
+     let displayedScheduleKey = null;
     let countdownInterval = null;
 
     function isSameDay(d1, d2) {
@@ -206,7 +218,7 @@ window.exportOverlayHTML = function () {
       const now = new Date();
       return scheduleList.filter(item => {
         const itemDate = new Date(item.time);
-        return itemDate.getTime() >= now.getTime() || isSameDay(itemDate, now);
+         return itemDate.getTime() >= now.getTime();
       });
     }
 
@@ -241,10 +253,10 @@ window.exportOverlayHTML = function () {
       if (mode === "manual" || mode === "custom-simple") {
         card.innerHTML = \`
           <div class="fade-content" id="previewFadeWrapper" data-anim="\${config.animEffect || 'fade'}">
-            <div class="tag">\${globalTag}</div>
-            <div class="title">\${titleText}</div>
-            <div class="time-info">\${fullTimeText}</div>
-            <div class="countdown" id="prevCountdown"></div>
+             <div class="tag schedule-tag">\${globalTag}</div>
+             <div class="title schedule-title">\${titleText}</div>
+             <div class="time-info schedule-time">\${fullTimeText}</div>
+             <div class="countdown schedule-countdown" id="prevCountdown"></div>
           </div>
         \`;
       } else {
@@ -302,45 +314,51 @@ window.exportOverlayHTML = function () {
       }
     }
 
-    function initDisplay() {
-      const valid = getValidSchedules();
-      if (valid.length === 0) {
-        renderCard(null, false);
-      } else {
-        renderCard(valid[0], true);
-      }
-    }
+     function initDisplay() {
+       const valid = getValidSchedules();
+       if (valid.length === 0) {
+         renderCard(null, false);
+         displayedScheduleKey = null;
+       } else {
+         renderCard(valid[0], true);
+         displayedScheduleKey = \`\${valid[0].time}|\${valid[0].title}\`;
+       }
+     }
 
-    function runRotation() {
-      const valid = getValidSchedules();
-      if (valid.length === 0) {
-        renderCard(null, false);
-        setTimeout(runRotation, ${interval});
-        return;
-      }
+     function runNextSchedule() {
+       const valid = getValidSchedules();
+       if (valid.length === 0) {
+         if (displayedScheduleKey !== null) {
+           renderCard(null, false);
+           displayedScheduleKey = null;
+         }
+         setTimeout(runNextSchedule, 1000);
+         return;
+       }
 
-      if (currentIndex >= valid.length) currentIndex = 0;
-      const activeItem = valid[currentIndex];
+       const activeItem = valid[0];
+       const activeKey = \`\${activeItem.time}|\${activeItem.title}\`;
 
-      const fader = document.getElementById("previewFadeWrapper") || document.getElementById("previewCard");
-      if (fader) fader.classList.add("hidden");
+       if (displayedScheduleKey !== activeKey) {
+         const fader = document.getElementById("previewFadeWrapper") || document.getElementById("previewCard");
+         if (fader) fader.classList.add("hidden");
 
-      setTimeout(() => {
-        renderCard(activeItem, true);
-        const newFader = document.getElementById("previewFadeWrapper") || document.getElementById("previewCard");
-        if (newFader) newFader.classList.remove("hidden");
-      }, 350);
+         setTimeout(() => {
+           renderCard(activeItem, true);
+           const newFader = document.getElementById("previewFadeWrapper") || document.getElementById("previewCard");
+           if (newFader) newFader.classList.remove("hidden");
+         }, 350);
+         displayedScheduleKey = activeKey;
+       }
 
-      currentIndex++;
-      setTimeout(runRotation, ${interval});
-    }
+       setTimeout(runNextSchedule, 1000);
+     }
 
-    initDisplay();
-    runRotation();
+     initDisplay();
+     runNextSchedule();
   <\/script>
 </body>
 </html>`;
 
  socket.emit("html", { uuid: localStorage.getItem("uuid"), html: standaloneHTML });
 };
-
